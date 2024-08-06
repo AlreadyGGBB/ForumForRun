@@ -25,6 +25,14 @@ public class UserDao implements IUser {
     }
 
     @Override
+    public boolean RegisterUser(String userName,String passWord) {
+//         这里可以做密码的格式校验
+        if (UserExisted(userName))
+            return false;
+         return jdbc.InsertOneRow("INSERT INTO user (userName,passWord) VALUES (?,?)",userName,passWord);
+    }
+
+    @Override
     public boolean UserLogin(String userName, String passWord) {
         User u = FindUserByUserName(userName);
         return u != null && u.getPassWord().equals(passWord);

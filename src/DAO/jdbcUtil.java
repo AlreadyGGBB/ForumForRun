@@ -39,12 +39,7 @@ public class jdbcUtil {
     public Map<String,Object> QueryOneRow(String sql, Object... params) {
         init();
         try (PreparedStatement state = conn.prepareStatement(sql)) {
-            for (int i = 0; i < params.length; i++){
-                if (params[i].getClass() == String.class)
-                    state.setString(i+1,(String) params[i]);
-                if (params[i].getClass() == Integer.class)
-                    state.setInt(i+1,(Integer) params[i]);
-            }
+            setParams(state,params);
             ResultSet resultSet = state.executeQuery();
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columCount = metaData.getColumnCount();
@@ -60,6 +55,28 @@ public class jdbcUtil {
         } catch (SQLException e) {
             System.out.println("Query Exception: "+e.getMessage());
             throw new RuntimeException(e);
+        }
+    }
+
+    public boolean InsertOneRow(String sql,Object... params){
+        init();
+        try (PreparedStatement state = conn.prepareStatement(sql)){
+            setParams(state,params);
+            return state.execute();
+        } catch (SQLException e) {
+            System.out.println("Insert Exception: "+e.getMessage());
+            throw new RuntimeException(e);
+        }finally {
+            close();
+        }
+    }
+
+    private void setParams(PreparedStatement state,Object... params) throws SQLException {
+        for (int i = 0; i < params.length; i++){
+            if (params[i].getClass() == String.class)
+                state.setString(i+1,(String) params[i]);
+            if (params[i].getClass() == Integer.class)
+                state.setInt(i+1,(Integer) params[i]);
         }
     }
 }
