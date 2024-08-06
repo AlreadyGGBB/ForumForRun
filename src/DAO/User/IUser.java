@@ -18,7 +18,8 @@ public interface IUser {
 
     //  用户注册，新增一个用户
     public boolean RegisterUser(String userName, String passWord);
-
+//用户的注销
+    public boolean Accountcancellation(User user);
 
     //    校验用户登录的用户名密码是否正确
     boolean UserLogin(String userName, String passWord);

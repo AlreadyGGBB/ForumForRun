@@ -9,7 +9,7 @@ import java.util.Map;
 public class jdbcUtil {
     private Connection conn = null;
 
-    private final String url = "jdbc:mysql://127.0.0.1:3306/iweb?useUnicode=true&characterEncoding=UTF-8";
+    private final String url = "jdbc:mysql://127.0.0.1:3306/forum?useUnicode=true&characterEncoding=UTF-8";
 
     private final String user = "root";
 
@@ -65,6 +65,19 @@ public class jdbcUtil {
             return state.execute();
         } catch (SQLException e) {
             System.out.println("Insert Exception: "+e.getMessage());
+            throw new RuntimeException(e);
+        }finally {
+            close();
+        }
+    }
+
+    public boolean Delete(String sql,Object... params){
+        init();
+        try (PreparedStatement state = conn.prepareStatement(sql)){
+            setParams(state,params);
+            return state.execute();
+        } catch (SQLException e) {
+            System.out.println("Delete Exception: "+e.getMessage());
             throw new RuntimeException(e);
         }finally {
             close();

@@ -33,6 +33,11 @@ public class UserDao implements IUser {
     }
 
     @Override
+    public boolean Accountcancellation(User user) {
+        return jdbc.Delete("DELETE FROM user WHERE userID = ?",Integer.valueOf(user.getUserID()));
+    }
+
+    @Override
     public boolean UserLogin(String userName, String passWord) {
         User u = FindUserByUserName(userName);
         return u != null && u.getPassWord().equals(passWord);
